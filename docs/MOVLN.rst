@@ -1,18 +1,21 @@
-Simulation Environment Document
-===============================
+Getting Started
+===============
+
+Installation
+------------
 
 Download Simulator
-------------------
+~~~~~~~~~~~~~~~~~~
 
 First download the
 `simulator <https://drive.google.com/drive/folders/1zbywYhxFCbSnSy4vDGaEieX_nlVhbhyl>`__
 and unzip it.
 
 Launch Simulator
-----------------
+~~~~~~~~~~~~~~~~
 
 Devices with graphical interfaces
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You just need to run the appropriate executable file in windows or
 Linux.
@@ -28,10 +31,10 @@ In Linux:
 .. _devices-without-graphical-interfaces1:
 
 Devices without graphical interfaces [1]_
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Verifying GitHub Access
-^^^^^^^^^^^^^^^^^^^^^^^
+'''''''''''''''''''''''
 
 Verify that you can access the Unreal Engine source code repository on
 GitHub: https://github.com/EpicGames/UnrealEngine. If you cannot access
@@ -39,7 +42,7 @@ the repository then you will need to `link your GitHub account with your
 Epic Games Account <https://www.unrealengine.com/en-US/ue-on-github>`__.
 
 Authenticating with GitHub Container Registry
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+'''''''''''''''''''''''''''''''''''''''''''''
 
 To download container images from GitHub Container Registry using Docker
 you will need to authenticate using a personal access token. If you do
@@ -65,7 +68,7 @@ If the authentication process was successful then you should see the
 message *“Login Succeeded”* displayed.
 
 Pulling Prebuilt Container Images
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+'''''''''''''''''''''''''''''''''
 
 The official prebuilt container images for Unreal Engine are stored as
 image tags in the
@@ -85,7 +88,7 @@ time. When the download is complete, you should see the message
 ghcr.io/epicgames/unreal-engine:dev-4.27”* displayed.
 
 Building the Container
-^^^^^^^^^^^^^^^^^^^^^^
+''''''''''''''''''''''
 
 You need to make sure you have sufficient permissions on the
 LinuxClient:
@@ -134,628 +137,56 @@ with the following command:
    cd /PATH/TO/LinuxClient
    bash GrabSim.sh -RenderOffScreen
 
-Communication Protocol
-----------------------
-
--  **Protocol**: gRPC
--  **Port**: 30001
-
-Data Types
-----------
-
-Only the data type is introduced, please refer to the interface method
-section for interface details.
-
-Count
-~~~~~
-
-Used for initword( In version 1)
-
-+---+---+---+--------------------------------------------------------+
-| F | T | V | Description                                            |
-| i | y | a |                                                        |
-| e | p | l |                                                        |
-| l | e | u |                                                        |
-| d |   | e |                                                        |
-+===+===+===+========================================================+
-| v | i | ( | Number of scenes in world. Means num_processes.        |
-| a | n | 0 | Usually set to 1                                       |
-| l | t | ) |                                                        |
-| u | 3 |   |                                                        |
-| e | 2 |   |                                                        |
-+---+---+---+--------------------------------------------------------+
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.Count(value=1)
-
-BatchMap
-~~~~~~~~
-
-Used for initword( In version 2)
-
-+---+---+-----+-------------------------------------------------------+
-| F | T | Va  | Description                                           |
-| i | y | lue |                                                       |
-| e | p |     |                                                       |
-| l | e |     |                                                       |
-| d |   |     |                                                       |
-+===+===+=====+=======================================================+
-| c | i | (0) | Number of scenes in world. Means num_processes.       |
-| o | n |     | Usually set to 1                                      |
-| u | t |     |                                                       |
-| n | 3 |     |                                                       |
-| t | 2 |     |                                                       |
-+---+---+-----+-------------------------------------------------------+
-| m | i | 3   | Meaning of mapID: 3 : Coffee 4 : Restaurant 5 : Nurse |
-| a | n | ,4, | home                                                  |
-| p | t | 5   |                                                       |
-| I | 3 |     |                                                       |
-| D | 2 |     |                                                       |
-+---+---+-----+-------------------------------------------------------+
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.BatchMap(count=1, mapID=3)
-
-Nothing
-~~~~~~~
-
-No content, used when interface does not need input or output values.(
-in version 1)
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.Nothing()
-
-NUL
-~~~
-
-No content, used when interface does not need input or output values.
-Equal to the Data Type: Nothing. (in version 2)
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.NUL()
-
-SceneID
-~~~~~~~
-
-+---+---+---+--------------------------------------------------------+
-| F | T | V | Description                                            |
-| i | y | a |                                                        |
-| e | p | l |                                                        |
-| l | e | u |                                                        |
-| d |   | e |                                                        |
-+===+===+===+========================================================+
-| v | i | ( | Scene ID. The desirable range is [0, Count-1]. Default |
-| a | n | 0 | is 0                                                   |
-| l | t | ) |                                                        |
-| u | 3 |   |                                                        |
-| e | 2 |   |                                                        |
-+---+---+---+--------------------------------------------------------+
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.SceneID(value=0)
-
-World
-~~~~~
-
-====== ========== ========================================
-Field  Type       Description
-====== ========== ========================================
-scenes list/Scene All scenes in world
-error  string     Partial error information from execution
-====== ========== ========================================
-
-ResetParams
-~~~~~~~~~~~
-
-====== ===== ========== ==========================================
-Field  Type  Value      Description
-====== ===== ========== ==========================================
-scene  int32 (0)        Target scene ID
-adjust bool  (False)    Set to True for init params to take effect
-height float 78.5~111.5 (90.4) Table height
-width  float 50~150     (107.4) Table width
-====== ===== ========== ==========================================
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.ResetParams()
-
-Object
-~~~~~~
-
-======== ======== ===============
-Field    Type     Description
-======== ======== ===============
-name     string   Object name
-location Location Object position
-rotation Rotation Object rotation
-======== ======== ===============
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.Object(name = "AA",type =
-   "ADMilk",location = GrabSim_pb2.Location(X=30,Y=-260,Z=84))
-
-Location
-~~~~~~~~
-
-===== ===== ============
-Field Type  Description
-===== ===== ============
-X     float X coordinate
-Y     float Y coordinate
-Z     float Z coordinate
-===== ===== ============
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.Location(X=30,Y=-260,Z=84)
-
-Rotation
-~~~~~~~~
-
-===== ===== =========================
-Field Type  Description
-===== ===== =========================
-angle float Rotation angle in degrees
-===== ===== =========================
-
-MakeObjects
-~~~~~~~~~~~
-
-+------+----------+------+--------------------------------------------+
-| F    | Type     | V    | Description                                |
-| ield |          | alue |                                            |
-+======+==========+======+============================================+
-| s    | int32    | (0)  | Target scene ID                            |
-| cene |          |      |                                            |
-+------+----------+------+--------------------------------------------+
-| ap   | bool     | (Fa  | Set to append objects or clear existing    |
-| pend |          | lse) | ones                                       |
-+------+----------+------+--------------------------------------------+
-| obj  | lis      |      | List of objects                            |
-| ects | t/Object |      |                                            |
-+------+----------+------+--------------------------------------------+
-
-ObjectList.Object
-~~~~~~~~~~~~~~~~~
-
-===== ===== ===== ====================================
-Field Type  Value Description
-===== ===== ===== ====================================
-x, y  float (0)   Object position, height at table top
-type  int         Object ID
-===== ===== ===== ====================================
-
-RemoveObjects
-~~~~~~~~~~~~~
-
-========= ========== ===== =================================
-Field     Type       Value Description
-========= ========== ===== =================================
-scene     int32      (0)   Target scene ID
-objectIDs list/int32       Index of objects in Scene.Objects
-========= ========== ===== =================================
-
-Action
-~~~~~~
-
-+---+----+------------------------------+------------------------------+
-| F | Ty | Value                        | Description                  |
-| i | pe |                              |                              |
-| e |    |                              |                              |
-| l |    |                              |                              |
-| d |    |                              |                              |
-+===+====+==============================+==============================+
-| s | i  | (0)                          | Target scene ID              |
-| c | nt |                              |                              |
-| e | 32 |                              |                              |
-| n |    |                              |                              |
-| e |    |                              |                              |
-+---+----+------------------------------+------------------------------+
-| a | en | Gr                           | WalkTo: Adjust robot         |
-| c | um | abSim_pb2.Action.ActionType. | position, 5 params Grasp:    |
-| t |    | WalkToGrabSim_pb2.Action.Act | Control grasping, left/right |
-| i |    | ionType.GraspGrabSim_pb2.Act | hand in valuesRelease:       |
-| o |    | ion.ActionType.ReleaseGrabSi | Control releasing,           |
-| n |    | m_pb2.Action.ActionType.Move | left/right hand in values    |
-|   |    |                              | Move: Control joint angles,  |
-|   |    |                              | 21 params in values          |
-+---+----+------------------------------+------------------------------+
-| v | li | ([0, …])                     | WalkTo: Adjust robot         |
-| a | st |                              | position, 5 paramsX, Y, Yaw, |
-| l | /f |                              | 0/-1/1, distance: If it      |
-| u | lo |                              | cannot be reached, it will   |
-| e | at |                              | find the target within 10    |
-| s |    |                              | cm# 0: Query only, not move  |
-|   |    |                              | # -1: Teleport to target     |
-|   |    |                              | position # 1: Navigation to  |
-|   |    |                              | target position              |
-+---+----+------------------------------+------------------------------+
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.Action(
-               scene=0,
-               action=GrabSim_pb2.Action.ActionType.WalkTo,
-               values=[location[0], location[1], location[2], -1, 10]
-           )
-
-Joint
-~~~~~
-
-======== ======== ==============
-Field    Type     Description
-======== ======== ==============
-name     string   Joint name
-location Location Joint position
-rotation Rotation Joint rotation
-======== ======== ==============
-
-**Usage:**
-
-.. code:: python
-
-   GrabSim_pb2.Joint(name="joint1", location=Location(1.0, 2.0, 3.0), rotation=Rotation(45))
+Concepts
+--------
 
 Scene
 ~~~~~
 
-+------+-------------+-------------------------------------------------+
-| F    | Type        | Description                                     |
-| ield |             |                                                 |
-+======+=============+=================================================+
-| sce  | int32       | Scene ID                                        |
-| neID |             |                                                 |
-+------+-------------+-------------------------------------------------+
-| loca | Location    | Robot coordinates (center of workspace, Scene   |
-| tion |             | coordinate system)                              |
-+------+-------------+-------------------------------------------------+
-| rota | Rotation    | Robot rotation angles                           |
-| tion |             |                                                 |
-+------+-------------+-------------------------------------------------+
-| jo   | list/       | Pose information for robot joints               |
-| ints | Scene.Joint |                                                 |
-+------+-------------+-------------------------------------------------+
-| fin  | list/S      | Pose information for robot finger joints        |
-| gers | cene.Finger |                                                 |
-+------+-------------+-------------------------------------------------+
-| obj  | list/S      | Position and info of all objects in scene.      |
-| ects | cene.Object | First object is table, last few are hands with  |
-|      |             | no position info                                |
-+------+-------------+-------------------------------------------------+
-| t    | int64       | Nanoseconds since 1970/1/1                      |
-| imes |             |                                                 |
-| tamp |             |                                                 |
-+------+-------------+-------------------------------------------------+
-| e    | string      | Partial error information from execution        |
-| rror |             |                                                 |
-+------+-------------+-------------------------------------------------+
+Our simulator provides 5 scenes, i.e.,separate tables, indoor scene,
+cafe, restaurant, and nursing house, which have a relatively large
+demand for robots. These scenes are rendered based on real-world
+scenarios and contain more realistic details. The simulator is flexible
+and users can change the lighting and place more additional objects in
+the scene. Our simulator also supports walking pedestrians in the scene.
 
-**Usage:**
+Agent
+~~~~~
 
-::
+Our simulator supports multiple agents with different practical uses.
+For example, the humanoid robot can navigate like a human and perform
+more actions such as turning the head or nodding to have a wider view,
+while the sweeping robot aims at cleaning the floor.
 
-   import numpy as np
-   p_x, p_y = scene.location.X, scene.location.Y
-   yaw = scene.rotation.Yaw * np.pi / 180
+Action
+~~~~~~
 
-::
+Our simulator supports continuous move or teleport actions. Users can
+define discrete actions such as rotating right by 30◦ . The humanoid
+agent has movable joints that can make all human movements, including
+rotation of the head, neck, and waist.
 
-   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
-   print('------------------show_env_info----------------------')
-   print(
-       f"location:{[scene.location.X, scene.location.Y]}, rotation:{scene.rotation.Yaw}\n",
-       f"joints number:{len(scene.joints)}, fingers number:{len(scene.fingers)}\n", f"objects number: {len(scene.objects)}\n"
-       f"rotation:{scene.rotation}, timestep:{scene.timestep}\n"
-       f"timestamp:{scene.timestamp}, collision:{scene.collision}, info:{scene.info}")
-
-Scene.Joint
-~~~~~~~~~~~
-
-======== ======== ==============
-Field    Type     Description
-======== ======== ==============
-name     string   Joint name
-location Location Joint position
-angle    float    Joint angle
-======== ======== ==============
-
-Scene.Finger
-~~~~~~~~~~~~
-
-======== ============= ====================================
-Field    Type          Description
-======== ============= ====================================
-name     string        Finger name
-location list/Location Position of each joint of the finger
-angle    float         Joint angle
-======== ============= ====================================
-
-Scene.Object
-~~~~~~~~~~~~
-
-======== ======================== =================================
-Field    Type                     Description
-======== ======================== =================================
-name     string                   Object name
-location Location                 Object position
-rotation Rotation                 Object rotation angle (-180, 180)
-boxes    list/Object.Box.Diagonal Bounding boxes of object
-======== ======================== =================================
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.Scene.Object([{'name': 'NFCJuice', 'location': [2525, 2510], 'angle': [0, 0, 0]}])
-
-Pose
-~~~~
-
-========= ======================== ========================
-Field     Type                     Description
-========= ======================== ========================
-timestamp int64                    Timestamp in nanoseconds
-joints    list\ `Joint <#joint>`__ Robot joint poses
-========= ======================== ========================
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=180)
-
-.. _makeobjects-1:
-
-MakeObjects
-~~~~~~~~~~~
-
-+------+----------+------+--------------------------------------------+
-| F    | Type     | V    | Description                                |
-| ield |          | alue |                                            |
-+======+==========+======+============================================+
-| s    | int32    | (0)  | Target scene ID                            |
-| cene |          |      |                                            |
-+------+----------+------+--------------------------------------------+
-| ap   | bool     | (Fa  | Set to append objects or clear existing    |
-| pend |          | lse) | ones                                       |
-+------+----------+------+--------------------------------------------+
-| obj  | lis      |      | List of objects                            |
-| ects | t/Object |      |                                            |
-+------+----------+------+--------------------------------------------+
-
-.. _objectlist.object-1:
-
-ObjectList.Object
-~~~~~~~~~~~~~~~~~
-
-===== ===== ===== ====================================
-Field Type  Value Description
-===== ===== ===== ====================================
-x, y  float (0)   Object position, height at table top
-type  int         Object ID
-===== ===== ===== ====================================
-
-.. _removeobjects-1:
-
-RemoveObjects
-~~~~~~~~~~~~~
-
-========= ========== ===== =================================
-Field     Type       Value Description
-========= ========== ===== =================================
-sceneID   int32      (0)   Target scene ID
-objectIDs list/int32       Index of objects in Scene.Objects
-========= ========== ===== =================================
-
-Move
-~~~~
-
-======== ===== ======================================================
-Field    Type  Description
-======== ===== ======================================================
-x        float Robot x coordinate
-y        float Robot y coordinate
-angle    float Robot current angle
-speed    float Robot moving speed in facing direction, cm/s
-rotating float Robot rotation speed, degrees/s, positive is clockwise
-======== ===== ======================================================
-
-CameraList
+Sim Object
 ~~~~~~~~~~
 
-======= ========= ===============
-Field   Type      Description
-======= ========= ===============
-sceneID int32     Target scene ID
-cameras list/enum CameraName
-======= ========= ===============
+Our simulator was built with 2,165 categories in total. We choose 129
+categories among them for interaction. Except for common objects in
+indoor environments, our simulator also includes some uncommon objects
+and more fine-grained categories, such as “soft drink” and “juice”.
 
-CameraName:
+Walker
+~~~~~~
 
--  Head_Color: Head RGB camera
+Our simulator supports adding Walker. The simulator has built 50 Walker
+models of different genders, ages, races, and appearances. The status of
+pedestrians can be controlled through the python API, including adding
+pedestrians, initializing locations, specifying routes, moving, etc.
 
--  Head_Depth: Head depth camera
+Setup
+=====
 
--  Head_Segment: Head Segment camera
-
--  Chest_Color: Chest RGB camera
-
--  Waist_Color: Waist RGB camera
-
--  Waist_Depth: Waist depth camera
-
-   **Usage:**
-
-::
-
-   GrabSim_pb2.CameraList(scene=0, cameras=[
-       GrabSim_pb2.CameraName.Head_Depth, GrabSim_pb2.CameraName.Head_Color,
-       GrabSim_pb2.CameraName.Head_Segment
-   ])
-
-CameraData
-~~~~~~~~~~
-
-========= ===================== ==========================
-Field     Type                  Description
-========= ===================== ==========================
-images    list/CameraData.Image Image data
-timestamp int64                 Nanoseconds since 1970/1/1
-========= ===================== ==========================
-
-CameraData.Image
-~~~~~~~~~~~~~~~~
-
-========== =========================== =================================
-Field      Type                        Description
-========== =========================== =================================
-name       string                      Camera name
-data       bytes                       Byte array
-dtype      string                      Data format (uint8, float16, etc)
-location   Location                    Camera position
-rotation   Rotation                    Camera rotation angles
-width      int                         Image width
-height     int                         Image height
-channels   int                         Number of channels
-parameters CamaraData.Image.Parameters Camera intrinsics
-========== =========================== =================================
-
-CameraData.Image.Parameters
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-+----+---------+-------------------------------------------------------+
-| F  | Type    | Description                                           |
-| ie |         |                                                       |
-| ld |         |                                                       |
-+====+=========+=======================================================+
-| fx | float   |                                                       |
-+----+---------+-------------------------------------------------------+
-| fy | float   |                                                       |
-+----+---------+-------------------------------------------------------+
-| cx | float   |                                                       |
-+----+---------+-------------------------------------------------------+
-| cy | float   |                                                       |
-+----+---------+-------------------------------------------------------+
-| ma | arra    | Transform matrix from camera to robot coordinates     |
-| tr | y/float | (4x4, flattened)                                      |
-| ix |         |                                                       |
-+----+---------+-------------------------------------------------------+
-
-WalkerList
-~~~~~~~~~~
-
-======= ========= =====================================================
-Field   Type      Description
-======= ========= =====================================================
-walkers list/enum walker_list can be appended through WalkerList.Walker
-scene   int32     Target scene ID
-======= ========= =====================================================
-
-**Usage:**
-
-::
-
-   walker_list.append(GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90)))
-   GrabSim_pb2.WalkerList(walkers=walker_list, scene=0)
-
-WalkerList.Walker
-~~~~~~~~~~~~~~~~~
-
-===== ================ ===============================================
-Field Type             Description
-===== ================ ===============================================
-id    int32            The serial number of the walker to join. From 0
-pose  GrabSim_pb2.Pose X, Y, Yaw
-===== ================ ===============================================
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90))
-
-WalkerControls
-~~~~~~~~~~~~~~
-
-+------+-------+-------------------------------------------------------+
-| F    | Type  | Description                                           |
-| ield |       |                                                       |
-+======+=======+=======================================================+
-| cont | list  | controls_list can be appended through                 |
-| rols | /enum | WalkerControls.WControl                               |
-+------+-------+-------------------------------------------------------+
-| s    | int32 | Target scene ID                                       |
-| cene |       |                                                       |
-+------+-------+-------------------------------------------------------+
-
-**Usage:**
-
-::
-
-   controls.append(GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose))
-   GrabSim_pb2.WalkerControls(controls=controls, scene=0)
-
-WalkerControls.WControl
-~~~~~~~~~~~~~~~~~~~~~~~
-
-======== ================ ==================================
-Field    Type             Description
-======== ================ ==================================
-id       int32            The joined walker’s serial number.
-autowalk str              Usually set to is_autowalk.
-speed    int32            The speed to move. (cm/s)
-pose     GrabSim_pb2.Pose X, Y, Yaw
-======== ================ ==================================
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose)
-
-RemoveList
-~~~~~~~~~~
-
-===== ========= ==================================
-Field Type      Description
-===== ========= ==================================
-IDs   list/enum The joined walker’s serial number.
-scene int32     Target scene ID
-===== ========= ==================================
-
-**Usage:**
-
-::
-
-   GrabSim_pb2.RemoveList(IDs=[1, 3], scene=scene_id)
-
-Interface Methods
------------------
+Initialization
+--------------
 
 First you need to do
 ~~~~~~~~~~~~~~~~~~~~
@@ -918,6 +349,93 @@ Get the position and angle of each joint of the robot
 
    pose = stub.ObservePose(GrabSim_pb2.SceneID(value=0))
 
+Images & Metadata
+-----------------
+
+Date type for camera
+~~~~~~~~~~~~~~~~~~~~
+
+CameraList
+^^^^^^^^^^
+
+======= ========= ===============
+Field   Type      Description
+======= ========= ===============
+sceneID int32     Target scene ID
+cameras list/enum CameraName
+======= ========= ===============
+
+CameraName:
+
+-  Head_Color: Head RGB camera
+
+-  Head_Depth: Head depth camera
+
+-  Head_Segment: Head Segment camera
+
+-  Chest_Color: Chest RGB camera
+
+-  Waist_Color: Waist RGB camera
+
+-  Waist_Depth: Waist depth camera
+
+   **Usage:**
+
+::
+
+   GrabSim_pb2.CameraList(scene=0, cameras=[
+       GrabSim_pb2.CameraName.Head_Depth, GrabSim_pb2.CameraName.Head_Color,
+       GrabSim_pb2.CameraName.Head_Segment
+   ])
+
+CameraData
+^^^^^^^^^^
+
+========= ===================== ==========================
+Field     Type                  Description
+========= ===================== ==========================
+images    list/CameraData.Image Image data
+timestamp int64                 Nanoseconds since 1970/1/1
+========= ===================== ==========================
+
+CameraData.Image
+^^^^^^^^^^^^^^^^
+
+========== =========================== =================================
+Field      Type                        Description
+========== =========================== =================================
+name       string                      Camera name
+data       bytes                       Byte array
+dtype      string                      Data format (uint8, float16, etc)
+location   Location                    Camera position
+rotation   Rotation                    Camera rotation angles
+width      int                         Image width
+height     int                         Image height
+channels   int                         Number of channels
+parameters CamaraData.Image.Parameters Camera intrinsics
+========== =========================== =================================
+
+CameraData.Image.Parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
++----+---------+-------------------------------------------------------+
+| F  | Type    | Description                                           |
+| ie |         |                                                       |
+| ld |         |                                                       |
++====+=========+=======================================================+
+| fx | float   |                                                       |
++----+---------+-------------------------------------------------------+
+| fy | float   |                                                       |
++----+---------+-------------------------------------------------------+
+| cx | float   |                                                       |
++----+---------+-------------------------------------------------------+
+| cy | float   |                                                       |
++----+---------+-------------------------------------------------------+
+| ma | arra    | Transform matrix from camera to robot coordinates     |
+| tr | y/float | (4x4, flattened)                                      |
+| ix |         |                                                       |
++----+---------+-------------------------------------------------------+
+
 Capture
 ~~~~~~~
 
@@ -946,342 +464,8 @@ the Data Types section/CamerList for details.
    # convert to BGR format
    rgb = rgb[:, :, [2, 1, 0]]
 
-Do
-~~
-
-Execute an action in the scene. Support WalkTo, Grasp, Release, Move
-actions. See the Data Types section/Action for details.
-
-Flexible angle and can walk to any reachable area. In VLN tasks, when
-executing the predicted action, you can customize the rotation angle and
-displacement distance corresponding to each action.
-
-**Request**: Action
-
-**Response**: Scene - updated scene state
-
-**Usage:**
-
-Navigate to (-650.0, -1550.0, -15.0), if you can’t reach it, you will
-find the target within 10 cm
-
-.. code:: python
-
-   Scene = stub.Do(GrabSim_pb2.Action(
-       scene=0,
-       action = GrabSim_pb2.Action.ActionType.WalkTo,
-       values = [ -650.0, -1550.0,-15.0,-1,10]
-   ))
-
-GenerateObject
-~~~~~~~~~~~~~~
-
-Generate an object in the scene. You can add object in the specified
-position you need.
-
-**Request**: ObjectList
-
-**Response**: Scene - updated scene with object
-
-**Usage:**
-
-.. code:: python
-
-   obj_list = [GrabSim_pb2.ObjectList.Object(X=25, Y=2, Yaw=15, Z=100, type=0)]
-   scene = stub.MakeObjects(GrabSim_pb2.ObjectList(objects=obj_list, scene=4))
-
-Create an item of type “ADMilk” at the coordinates (X=30, Y=-260, Z=84)
-
-.. code:: python
-
-   scene = stub.GenerateObject(GrabSim_pb2.Object(name = "AA",type =
-   6,location = GrabSim_pb2_pb2.Location(X=30,Y=-260,Z=84)))
-
-AcquireWalkers
-~~~~~~~~~~~~~~
-
-Query the model category of all walkers.
-
-**Request**: Nothing
-
-**Response**: model category of all walkers.
-
-**Usage:**
-
-::
-
-   print(stub.AcquireWalkers(GrabSim_pb2.NUL()))
-
-All walker model categories to the appendix for details. We provide 52
-categories of walker models with different appearances.
-
-AddWalker
-~~~~~~~~~
-
-Add walkers to the scene.
-
-**Request**: WalkerList - list of walkers to add
-
-**Response**: Scene - updated scene with walkers
-
-**Usage:**
-
-.. code:: python
-
-   updated_scene = stub.AddWalker(GrabSim_pb2.WalkerList(walkers=[walker1, walker2]))
-
-Add 4 walkers at specified positions to the scene and update the scene:
-
-.. code:: python
-
-   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
-
-   walker_loc = [[120, -500], [-35, -385], [115, -360], [50,-392]]
-   walker_list = []
-   for i in range(len(walker_loc)):
-       loc = walker_loc[i]
-       action = GrabSim_pb2.Action(scene=0, action=GrabSim_pb2.Action.ActionType.WalkTo, 
-                                   values=[loc[0], loc[1], 0, 0, 0])
-       scene = sim_client.Do(action)
-       print(scene.info)
-       walker_list.append(GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90)))
-   scene = stub.AddWalker(GrabSim_pb2.WalkerList(walkers=walker_list, scene=0))
-
-ControlWalkers
-~~~~~~~~~~~~~~
-
-Control walker movements.
-
-**Request**: WalkerControls - controls for each walker
-
-**Response**: Scene - updated scene with walker positions
-
-**Usage:**
-
-.. code:: python
-
-   updated_scene = stub.ControlWalkers(GrabSim_pb2.WalkerControls(controls=[control1, control2]))
-
-Designate 4 walkers to go to the designated location respectively, using
-ControlWalkers will formulate the route and move according to the
-designated pose and speed.
-
-.. code:: python
-
-   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
-
-   walker_loc = [[95, 140], [93, -356], [123, 400], [97,-381]]
-   controls = []
-   for i in range(len(scene.walkers)):
-       loc = walker_loc[i]
-       is_autowalk = True
-       pose = GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=180)
-       controls.append(GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose))
-   scene = stub.ControlWalkers(GrabSim_pb2.WalkerControls(controls=controls, scene=0))
-
-RemoveWalkers
-~~~~~~~~~~~~~
-
-Remove walkers from the scene.
-
-**Request**: RemoveList - IDs of walkers to remove
-
-**Response**: Scene - updated scene without removed walkers / delete
-specific walkers.
-
-**Usage:**
-
-.. code:: python
-
-   updated_scene = stub.RemoveWalkers(GrabSim_pb2.RemoveList(walker_ids=[1, 2]))
-
-Remove the walker and update the scene:
-
-::
-
-   scene = stub.Observe(GrabSim_pb2.SceneID(value=scene_id))
-   # print(scene.walkers)
-   scene = stub.RemoveWalkers(GrabSim_pb2.RemoveList(IDs=[1, 3], scene=scene_id))
-
-CleanWalkers
-~~~~~~~~~~~~
-
-Remove all walkers from the scene.
-
-**Request**: SceneID
-
-**Response**: Scene - updated scene without walkers / delete all
-walkers.
-
-**Usage:**
-
-.. code:: python
-
-   update_scene = stub.CleanWalkers(GrabSim_pb2.SceneID(value=0)) 
-
-BindCommand
-~~~~~~~~~~~
-
-Receive commands from the grpc server through BindCommand binding, such
-as clicking the record button in the VR scene, you will receive the
-“record” command
-
-**Request**: SceneID
-
-**Response**: Nothing
-
-**Usage:**
-
-.. code:: python
-
-   for cmd in stub.BindCommand(GrabSim_pb2.SceneID(value=0)):
-   	print(cmd)
-
-demo
-----
-
-easy beginning for Vision and Language navigation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code:: python
-
-   from google.protobuf import message
-   import grpc
-   import numpy as np
-   import cv2
-   import matplotlib.pyplot as plt
-
-   import GrabSim_pb2_grpc
-   import GrabSim_pb2
-
-   channel = grpc.insecure_channel('localhost:30001',options=[
-               ('grpc.max_send_message_length', 1024*1024*1024),
-               ('grpc.max_receive_message_length', 1024*1024*1024)
-           ])  # define the channel
-
-   stub = GrabSim_pb2_grpc.GrabSimStub(channel) # create a client
-   initworld = stub.SetWorld(GrabSim_pb2.BatchMap(count=4, mapID=3)) # init the world and creat 4 scenes(Caffe)
-
-   for i in range(len(initworld.scenes)):
-       scene=initworld.scenes[i] # choose the world's scenes[i] and print agent's location in the scene
-       print("scene %d, ginger location (%d,%d) direction %d"%(i,scene.location.X,scene.location.Y,scene.rotation.Yaw))
-       for j in range(len(initworld.scenes[i].objects)): # get the object and location in the scene
-           object = scene.objects[j]
-           print("scene %d, object %d: name %s, location (%d,%d,%d)"%(i,j,object.name,object.location.X,object.location.Y,object.location.Z))
-           
-       scene = stub.Do(GrabSim_pb2.Action(scene=i, action=GrabSim_pb2.Action.WalkTo, values=[-500, 100, 90, -1, 10])) 
-       # the agent naviagtion to (-500, 100, 90) and update scene.
-       print("scene %d, ginger moved to location %d,%d direction %d"%(i,scene.location.X,scene.location.Y,scene.rotation.Yaw))
-       
-   message = stub.Capture(GrabSim_pb2.CameraList(scene=0, cameras=[GrabSim_pb2.CameraName.Head_Depth, GrabSim_pb2.CameraName.Head_Color])) # use the carmer in agent's head to get observation(depth, RGB, segmentation)
-   images = message.images
-
-   depth = np.frombuffer(images[0].data, dtype=images[0].dtype).reshape(
-       (images[0].height, images[0].width, images[0].channels))
-   rgb = np.frombuffer(images[1].data, dtype=images[1].dtype).reshape(
-       (images[1].height, images[1].width, images[1].channels))
-   seg = np.frombuffer(images[0].data, dtype=images[0].dtype).reshape(
-       (images[0].height, images[0].width, images[0].channels))
-   items = message.info.split(';')
-   seg_object_names = {}
-   	for item in items:
-           key, value = item.split(':')
-           seg_object_names[int(key)] = value
-   # convert to BGR format
-   rgb = rgb[:, :, [2, 1, 0]]
-     
-   scene = stub.Reset(GrabSim_pb2.ResetParams(scene=0)) # reset scene[0] in the world
-
-add objects in simulator
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code:: python
-
-   import grpc
-   import GrabSim_pb2_grpc
-   import GrabSim_pb2
-
-   channel = grpc.insecure_channel('localhost:30001',options=[
-               ('grpc.max_send_message_length', 1024*1024*1024),
-               ('grpc.max_receive_message_length', 1024*1024*1024)
-           ])  # define the channel
-
-   stub = GrabSim_pb2_grpc.GrabSimStub(channel) # create a client
-   initworld = stub.SetWorld(GrabSim_pb2.BatchMap(count=1, mapID=3)) # set world
-   scene = initworld.scenes[0] # choose scene
-
-   obj_list = [GrabSim_pb2.ObjectList.Object(X=25, Y=2, Yaw=15, Z=100, type="Mug")]
-   scene = stub.MakeObjects(GrabSim_pb2.ObjectList(objects=obj_list, scene=0))
-   objects = scene.objects
-
-add walkers in simulator
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code:: python
-
-   import grpc
-   import GrabSim_pb2_grpc
-   import GrabSim_pb2
-
-   channel = grpc.insecure_channel('localhost:30001',options=[
-               ('grpc.max_send_message_length', 1024*1024*1024),
-               ('grpc.max_receive_message_length', 1024*1024*1024)
-           ])  # define the channel
-
-   stub = GrabSim_pb2_grpc.GrabSimStub(channel) # create a client
-   initworld = stub.SetWorld(GrabSim_pb2.BatchMap(count=1, mapID=3)) # set world
-   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
-
-   # acquire walkers
-   print(stub.AcquireWalkers(GrabSim_pb2.NUL()))
-
-   # add walkers
-   walker_loc = [[120, -500], [-35, -385], [115, -360], [50,-392]]
-   walker_list = []
-   for i in range(len(walker_loc)):
-       loc = walker_loc[i]
-       action = GrabSim_pb2.Action(scene=0, action=GrabSim_pb2.Action.ActionType.WalkTo, 
-                                   values=[loc[0], loc[1], 0, 0, 0])
-       scene = sim_client.Do(action)
-       print(scene.info)
-       walker_list.append(GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90)))
-   scene = stub.AddWalker(GrabSim_pb2.WalkerList(walkers=walker_list, scene=0))
-
-   # control walkers
-   walker_loc = [[95, 140], [93, -356], [123, 400], [97,-381]]
-   controls = []
-   for i in range(len(scene.walkers)):
-       loc = walker_loc[i]
-       is_autowalk = True
-       pose = GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=180)
-       controls.append(GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose))
-   scene = stub.ControlWalkers(GrabSim_pb2.WalkerControls(controls=controls, scene=0))
-
-   # remove walkers
-   print(scene.walkers)
-   scene = stub.RemoveWalkers(GrabSim_pb2.RemoveList(IDs=[1, 3], scene=0))
-   print(scene.walkers)
-
-   # clean walkers
-   scene = stub.CleanWalkers(GrabSim_pb2.SceneID(value=0)) 
-
-The walker’s start location and target location must be reachable.
-Otherwise the the scene.info will be unreachable. You can test whether
-the target location is reachable by the following method:
-
-::
-
-   msg = stub.Do(GrabSim_pb2.Action(
-       action = GrabSim_pb2.Action.WalkTo,
-       values = [-2150,-1350,-100, 0, 10] 
-       # 0: Query only, not move
-       # -1: Teleport to target position
-       # 1: Navigation to target position
-   ))
-   print(msg.info)
-
-appendix
---------
+Scenes
+------
 
 List of scenes
 ~~~~~~~~~~~~~~
@@ -1325,6 +509,200 @@ map id : 5 – Nursing Room
    :alt: img
 
    img
+
+Data type for scene
+~~~~~~~~~~~~~~~~~~~
+
+Count
+^^^^^
+
+Used for initword( In version 1)
+
++---+---+---+--------------------------------------------------------+
+| F | T | V | Description                                            |
+| i | y | a |                                                        |
+| e | p | l |                                                        |
+| l | e | u |                                                        |
+| d |   | e |                                                        |
++===+===+===+========================================================+
+| v | i | ( | Number of scenes in world. Means num_processes.        |
+| a | n | 0 | Usually set to 1                                       |
+| l | t | ) |                                                        |
+| u | 3 |   |                                                        |
+| e | 2 |   |                                                        |
++---+---+---+--------------------------------------------------------+
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.Count(value=1)
+
+BatchMap
+^^^^^^^^
+
+Used for initword( In version 2)
+
++---+---+-----+-------------------------------------------------------+
+| F | T | Va  | Description                                           |
+| i | y | lue |                                                       |
+| e | p |     |                                                       |
+| l | e |     |                                                       |
+| d |   |     |                                                       |
++===+===+=====+=======================================================+
+| c | i | (0) | Number of scenes in world. Means num_processes.       |
+| o | n |     | Usually set to 1                                      |
+| u | t |     |                                                       |
+| n | 3 |     |                                                       |
+| t | 2 |     |                                                       |
++---+---+-----+-------------------------------------------------------+
+| m | i | 3   | Meaning of mapID: 3 : Coffee 4 : Restaurant 5 : Nurse |
+| a | n | ,4, | home                                                  |
+| p | t | 5   |                                                       |
+| I | 3 |     |                                                       |
+| D | 2 |     |                                                       |
++---+---+-----+-------------------------------------------------------+
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.BatchMap(count=1, mapID=3)
+
+Nothing
+^^^^^^^
+
+No content, used when interface does not need input or output values.(
+in version 1)
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.Nothing()
+
+NUL
+^^^
+
+No content, used when interface does not need input or output values.
+Equal to the Data Type: Nothing. (in version 2)
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.NUL()
+
+SceneID
+^^^^^^^
+
++---+---+---+--------------------------------------------------------+
+| F | T | V | Description                                            |
+| i | y | a |                                                        |
+| e | p | l |                                                        |
+| l | e | u |                                                        |
+| d |   | e |                                                        |
++===+===+===+========================================================+
+| v | i | ( | Scene ID. The desirable range is [0, Count-1]. Default |
+| a | n | 0 | is 0                                                   |
+| l | t | ) |                                                        |
+| u | 3 |   |                                                        |
+| e | 2 |   |                                                        |
++---+---+---+--------------------------------------------------------+
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.SceneID(value=0)
+
+World
+^^^^^
+
+====== ========== ========================================
+Field  Type       Description
+====== ========== ========================================
+scenes list/Scene All scenes in world
+error  string     Partial error information from execution
+====== ========== ========================================
+
+ResetParams
+^^^^^^^^^^^
+
+====== ===== ========== ==========================================
+Field  Type  Value      Description
+====== ===== ========== ==========================================
+scene  int32 (0)        Target scene ID
+adjust bool  (False)    Set to True for init params to take effect
+height float 78.5~111.5 (90.4) Table height
+width  float 50~150     (107.4) Table width
+====== ===== ========== ==========================================
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.ResetParams()
+
+.. _scene-1:
+
+Scene
+^^^^^
+
++------+-------------+-------------------------------------------------+
+| F    | Type        | Description                                     |
+| ield |             |                                                 |
++======+=============+=================================================+
+| sce  | int32       | Scene ID                                        |
+| neID |             |                                                 |
++------+-------------+-------------------------------------------------+
+| loca | Location    | Robot coordinates (center of workspace, Scene   |
+| tion |             | coordinate system)                              |
++------+-------------+-------------------------------------------------+
+| rota | Rotation    | Robot rotation angles                           |
+| tion |             |                                                 |
++------+-------------+-------------------------------------------------+
+| jo   | list/       | Pose information for robot joints               |
+| ints | Scene.Joint |                                                 |
++------+-------------+-------------------------------------------------+
+| fin  | list/S      | Pose information for robot finger joints        |
+| gers | cene.Finger |                                                 |
++------+-------------+-------------------------------------------------+
+| obj  | list/S      | Position and info of all objects in scene.      |
+| ects | cene.Object | First object is table, last few are hands with  |
+|      |             | no position info                                |
++------+-------------+-------------------------------------------------+
+| t    | int64       | Nanoseconds since 1970/1/1                      |
+| imes |             |                                                 |
+| tamp |             |                                                 |
++------+-------------+-------------------------------------------------+
+| e    | string      | Partial error information from execution        |
+| rror |             |                                                 |
++------+-------------+-------------------------------------------------+
+
+**Usage:**
+
+::
+
+   import numpy as np
+   p_x, p_y = scene.location.X, scene.location.Y
+   yaw = scene.rotation.Yaw * np.pi / 180
+
+::
+
+   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
+   print('------------------show_env_info----------------------')
+   print(
+       f"location:{[scene.location.X, scene.location.Y]}, rotation:{scene.rotation.Yaw}\n",
+       f"joints number:{len(scene.joints)}, fingers number:{len(scene.fingers)}\n", f"objects number: {len(scene.objects)}\n"
+       f"rotation:{scene.rotation}, timestep:{scene.timestep}\n"
+       f"timestamp:{scene.timestamp}, collision:{scene.collision}, info:{scene.info}")
+
+Objects
+=======
+
+Object Types
+------------
 
 List of objects inherent to the scene
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1500,88 +878,6 @@ Nursing Room
 | Fruit          |
 +----------------+
 
-Controllable list Walker’s model categories(total 50 categories of walkers)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-+---------+---------+----------+--------+--------+--------+--------+
-| Type    |         |          |        |        |        |        |
-+=========+=========+==========+========+========+========+========+
-| walker: | walker: | walker:  |        |        |        |        |
-| “Boy01” | “Boy02” | “Boy03”  |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: |         |          |        |        |        |        |
-| “Boy    |         |          |        |        |        |        |
-| Euro01” |         |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  |        |        |        |        |
-| “       | “       | “Girl03” |        |        |        |        |
-| Girl01” | Girl02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: |         |          |        |        |        |        |
-| “Girl   |         |          |        |        |        |        |
-| Euro01” |         |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  |        |        |        |        |
-| “       | “       | “Male03” |        |        |        |        |
-| Male01” | Male02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: |          |        |        |        |        |
-| “Male   | “Male   |          |        |        |        |        |
-| Afro01” | Afro02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: |         |          |        |        |        |        |
-| “MaleAf |         |          |        |        |        |        |
-| roOw01” |         |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  | w      |        |        |        |
-| “Male   | “Male   | “Mal     | alker: |        |        |        |
-| Amer01” | Amer02” | eAmer03” | “MaleA |        |        |        |
-|         |         |          | mer04” |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: |          |        |        |        |        |
-| “Male   | “Male   |          |        |        |        |        |
-| Asia01” | Asia02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  |        |        |        |        |
-| “MaleAs | “MaleAs | “MaleAsi |        |        |        |        |
-| iaOw01” | iaOw02” | aOwOw03” |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: |          |        |        |        |        |
-| “Male   | “Male   |          |        |        |        |        |
-| Euro01” | Euro02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: |          |        |        |        |        |
-| “MaleEu | “MaleEu |          |        |        |        |        |
-| roOw01” | roOw02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  | w      | walke  | walke  |        |
-| “Fe     | “Fe     | “F       | alker: | r:“Fem | r:“Fem |        |
-| male01” | male02” | emale03” | “Fem   | ale05” | ale06” |        |
-|         |         |          | ale04” |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walke    | w      | w      | w      | w      |
-| “Female | “Female | r:“Femal | alker: | alker: | alker: | alker: |
-| Afro01” | Afro02” | eAfro03” | “F     | “F     | “F     | “F     |
-|         |         |          | emaleA | emaleA | emaleA | emaleA |
-|         |         |          | fro04” | fro05” | fro06” | fro07” |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  |        |        |        |        |
-| “F      | “F      | “FemaleA |        |        |        |        |
-| emaleAf | emaleAf | froOw03” |        |        |        |        |
-| roOw01” | roOw02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  | w      |        |        |        |
-| “Female | “Female | “Femal   | alker: |        |        |        |
-| Asia01” | Asia02” | eEuro01” | “F     |        |        |        |
-|         |         |          | emaleE |        |        |        |
-|         |         |          | uro02” |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-| walker: | walker: | walker:  |        |        |        |        |
-| “F      | “F      | “FemaleE |        |        |        |        |
-| emaleEu | emaleEu | uroOw03” |        |        |        |        |
-| roOw01” | roOw02” |          |        |        |        |        |
-+---------+---------+----------+--------+--------+--------+--------+
-
 List of controllable generated objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1668,6 +964,313 @@ ID Name
 72 Tissue
 == ====================
 
+Data types for Objects
+----------------------
+
+Object
+~~~~~~
+
+======== ======== ===============
+Field    Type     Description
+======== ======== ===============
+name     string   Object name
+location Location Object position
+rotation Rotation Object rotation
+======== ======== ===============
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.Object(name = "AA",type =
+   "ADMilk",location = GrabSim_pb2.Location(X=30,Y=-260,Z=84))
+
+MakeObjects
+~~~~~~~~~~~
+
++------+----------+------+--------------------------------------------+
+| F    | Type     | V    | Description                                |
+| ield |          | alue |                                            |
++======+==========+======+============================================+
+| s    | int32    | (0)  | Target scene ID                            |
+| cene |          |      |                                            |
++------+----------+------+--------------------------------------------+
+| ap   | bool     | (Fa  | Set to append objects or clear existing    |
+| pend |          | lse) | ones                                       |
++------+----------+------+--------------------------------------------+
+| obj  | lis      |      | List of objects                            |
+| ects | t/Object |      |                                            |
++------+----------+------+--------------------------------------------+
+
+ObjectList.Object
+~~~~~~~~~~~~~~~~~
+
+===== ===== ===== ====================================
+Field Type  Value Description
+===== ===== ===== ====================================
+x, y  float (0)   Object position, height at table top
+type  int         Object ID
+===== ===== ===== ====================================
+
+RemoveObjects
+~~~~~~~~~~~~~
+
+========= ========== ===== =================================
+Field     Type       Value Description
+========= ========== ===== =================================
+scene     int32      (0)   Target scene ID
+objectIDs list/int32       Index of objects in Scene.Objects
+========= ========== ===== =================================
+
+Set Object States
+-----------------
+
+.. _observe-1:
+
+Observe
+~~~~~~~
+
+Get object and robot poses in the scene.
+
+**Request**: SceneID
+
+**Response**: Scene
+
+**Usage:**
+
+.. code:: python
+
+   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
+   objects = scene.objects
+
+GenerateObject
+~~~~~~~~~~~~~~
+
+Generate an object in the scene. You can add object in the specified
+position you need.
+
+**Request**: ObjectList
+
+**Response**: Scene - updated scene with object
+
+**Usage:**
+
+.. code:: python
+
+   obj_list = [GrabSim_pb2.ObjectList.Object(X=25, Y=2, Yaw=15, Z=100, type=0)]
+   scene = stub.MakeObjects(GrabSim_pb2.ObjectList(objects=obj_list, scene=4))
+
+Create an item of type “ADMilk” at the coordinates (X=30, Y=-260, Z=84)
+
+.. code:: python
+
+   scene = stub.GenerateObject(GrabSim_pb2.Object(name = "AA",type =
+   6,location = GrabSim_pb2_pb2.Location(X=30,Y=-260,Z=84)))
+
+Agent Actions
+=============
+
+Navigation
+----------
+
+Data type for Agents and Actions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Location
+^^^^^^^^
+
+===== ===== ============
+Field Type  Description
+===== ===== ============
+X     float X coordinate
+Y     float Y coordinate
+Z     float Z coordinate
+===== ===== ============
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.Location(X=30,Y=-260,Z=84)
+
+Rotation
+^^^^^^^^
+
+===== ===== =========================
+Field Type  Description
+===== ===== =========================
+angle float Rotation angle in degrees
+===== ===== =========================
+
+.. _action-1:
+
+Action
+^^^^^^
+
++---+----+------------------------------+------------------------------+
+| F | Ty | Value                        | Description                  |
+| i | pe |                              |                              |
+| e |    |                              |                              |
+| l |    |                              |                              |
+| d |    |                              |                              |
++===+====+==============================+==============================+
+| s | i  | (0)                          | Target scene ID              |
+| c | nt |                              |                              |
+| e | 32 |                              |                              |
+| n |    |                              |                              |
+| e |    |                              |                              |
++---+----+------------------------------+------------------------------+
+| a | en | Gr                           | WalkTo: Adjust robot         |
+| c | um | abSim_pb2.Action.ActionType. | position, 5 params Grasp:    |
+| t |    | WalkToGrabSim_pb2.Action.Act | Control grasping, left/right |
+| i |    | ionType.GraspGrabSim_pb2.Act | hand in valuesRelease:       |
+| o |    | ion.ActionType.ReleaseGrabSi | Control releasing,           |
+| n |    | m_pb2.Action.ActionType.Move | left/right hand in values    |
+|   |    |                              | Move: Control joint angles,  |
+|   |    |                              | 21 params in values          |
++---+----+------------------------------+------------------------------+
+| v | li | ([0, …])                     | WalkTo: Adjust robot         |
+| a | st |                              | position, 5 paramsX, Y, Yaw, |
+| l | /f |                              | 0/-1/1, distance: If it      |
+| u | lo |                              | cannot be reached, it will   |
+| e | at |                              | find the target within 10    |
+| s |    |                              | cm# 0: Query only, not move  |
+|   |    |                              | # -1: Teleport to target     |
+|   |    |                              | position # 1: Navigation to  |
+|   |    |                              | target position              |
++---+----+------------------------------+------------------------------+
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.Action(
+               scene=0,
+               action=GrabSim_pb2.Action.ActionType.WalkTo,
+               values=[location[0], location[1], location[2], -1, 10]
+           )
+
+Pose
+^^^^
+
+========= ======================== ========================
+Field     Type                     Description
+========= ======================== ========================
+timestamp int64                    Timestamp in nanoseconds
+joints    list\ `Joint <#joint>`__ Robot joint poses
+========= ======================== ========================
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=180)
+
+Move
+^^^^
+
+======== ===== ======================================================
+Field    Type  Description
+======== ===== ======================================================
+x        float Robot x coordinate
+y        float Robot y coordinate
+angle    float Robot current angle
+speed    float Robot moving speed in facing direction, cm/s
+rotating float Robot rotation speed, degrees/s, positive is clockwise
+======== ===== ======================================================
+
+Change Agent States
+~~~~~~~~~~~~~~~~~~~
+
+Do
+^^
+
+Execute an action in the scene. Support WalkTo, Grasp, Release, Move
+actions. See the Data Types section/Action for details.
+
+Flexible angle and can walk to any reachable area. In VLN tasks, when
+executing the predicted action, you can customize the rotation angle and
+displacement distance corresponding to each action.
+
+**Request**: Action
+
+**Response**: Scene - updated scene state
+
+**Usage:**
+
+Navigate to (-650.0, -1550.0, -15.0), if you can’t reach it, you will
+find the target within 10 cm
+
+.. code:: python
+
+   Scene = stub.Do(GrabSim_pb2.Action(
+       scene=0,
+       action = GrabSim_pb2.Action.ActionType.WalkTo,
+       values = [ -650.0, -1550.0,-15.0,-1,10]
+   ))
+
+.. _observepose-1:
+
+ObservePose
+^^^^^^^^^^^
+
+Get the position and angle of each joint of the robot
+
+**Request**: SceneID
+
+**Response**: Scene
+
+**Usage:**
+
+::
+
+   pose = stub.ObservePose(GrabSim_pb2.SceneID(value=0))
+
+Grab
+----
+
+Data type for Grab
+~~~~~~~~~~~~~~~~~~
+
+Scene.Joint
+^^^^^^^^^^^
+
+======== ======== ==============
+Field    Type     Description
+======== ======== ==============
+name     string   Joint name
+location Location Joint position
+angle    float    Joint angle
+======== ======== ==============
+
+Scene.Finger
+^^^^^^^^^^^^
+
+======== ============= ====================================
+Field    Type          Description
+======== ============= ====================================
+name     string        Finger name
+location list/Location Position of each joint of the finger
+angle    float         Joint angle
+======== ============= ====================================
+
+Joint
+^^^^^
+
+======== ======== ==============
+Field    Type     Description
+======== ======== ==============
+name     string   Joint name
+location Location Joint position
+rotation Rotation Joint rotation
+======== ======== ==============
+
+**Usage:**
+
+.. code:: python
+
+   GrabSim_pb2.Joint(name="joint1", location=Location(1.0, 2.0, 3.0), rotation=Rotation(45))
+
 Joint Information
 ~~~~~~~~~~~~~~~~~
 
@@ -1696,6 +1299,471 @@ Action.values param Name
 19                  RWrist_X_Anchorn
 20                  RWrist_Y_Anchorn
 =================== ===================
+
+Walkers
+=======
+
+Walkers Types
+-------------
+
+Controllable list Walker’s model categories(total 50 categories of walkers)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++---------+---------+----------+--------+--------+--------+--------+
+| Type    |         |          |        |        |        |        |
++=========+=========+==========+========+========+========+========+
+| walker: | walker: | walker:  |        |        |        |        |
+| “Boy01” | “Boy02” | “Boy03”  |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: |         |          |        |        |        |        |
+| “Boy    |         |          |        |        |        |        |
+| Euro01” |         |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  |        |        |        |        |
+| “       | “       | “Girl03” |        |        |        |        |
+| Girl01” | Girl02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: |         |          |        |        |        |        |
+| “Girl   |         |          |        |        |        |        |
+| Euro01” |         |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  |        |        |        |        |
+| “       | “       | “Male03” |        |        |        |        |
+| Male01” | Male02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: |          |        |        |        |        |
+| “Male   | “Male   |          |        |        |        |        |
+| Afro01” | Afro02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: |         |          |        |        |        |        |
+| “MaleAf |         |          |        |        |        |        |
+| roOw01” |         |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  | w      |        |        |        |
+| “Male   | “Male   | “Mal     | alker: |        |        |        |
+| Amer01” | Amer02” | eAmer03” | “MaleA |        |        |        |
+|         |         |          | mer04” |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: |          |        |        |        |        |
+| “Male   | “Male   |          |        |        |        |        |
+| Asia01” | Asia02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  |        |        |        |        |
+| “MaleAs | “MaleAs | “MaleAsi |        |        |        |        |
+| iaOw01” | iaOw02” | aOwOw03” |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: |          |        |        |        |        |
+| “Male   | “Male   |          |        |        |        |        |
+| Euro01” | Euro02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: |          |        |        |        |        |
+| “MaleEu | “MaleEu |          |        |        |        |        |
+| roOw01” | roOw02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  | w      | walke  | walke  |        |
+| “Fe     | “Fe     | “F       | alker: | r:“Fem | r:“Fem |        |
+| male01” | male02” | emale03” | “Fem   | ale05” | ale06” |        |
+|         |         |          | ale04” |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walke    | w      | w      | w      | w      |
+| “Female | “Female | r:“Femal | alker: | alker: | alker: | alker: |
+| Afro01” | Afro02” | eAfro03” | “F     | “F     | “F     | “F     |
+|         |         |          | emaleA | emaleA | emaleA | emaleA |
+|         |         |          | fro04” | fro05” | fro06” | fro07” |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  |        |        |        |        |
+| “F      | “F      | “FemaleA |        |        |        |        |
+| emaleAf | emaleAf | froOw03” |        |        |        |        |
+| roOw01” | roOw02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  | w      |        |        |        |
+| “Female | “Female | “Femal   | alker: |        |        |        |
+| Asia01” | Asia02” | eEuro01” | “F     |        |        |        |
+|         |         |          | emaleE |        |        |        |
+|         |         |          | uro02” |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+| walker: | walker: | walker:  |        |        |        |        |
+| “F      | “F      | “FemaleE |        |        |        |        |
+| emaleEu | emaleEu | uroOw03” |        |        |        |        |
+| roOw01” | roOw02” |          |        |        |        |        |
++---------+---------+----------+--------+--------+--------+--------+
+
+Data type for Walkers
+---------------------
+
+WalkerList
+~~~~~~~~~~
+
+======= ========= =====================================================
+Field   Type      Description
+======= ========= =====================================================
+walkers list/enum walker_list can be appended through WalkerList.Walker
+scene   int32     Target scene ID
+======= ========= =====================================================
+
+**Usage:**
+
+::
+
+   walker_list.append(GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90)))
+   GrabSim_pb2.WalkerList(walkers=walker_list, scene=0)
+
+WalkerList.Walker
+~~~~~~~~~~~~~~~~~
+
+===== ================ ===============================================
+Field Type             Description
+===== ================ ===============================================
+id    int32            The serial number of the walker to join. From 0
+pose  GrabSim_pb2.Pose X, Y, Yaw
+===== ================ ===============================================
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90))
+
+WalkerControls
+~~~~~~~~~~~~~~
+
++------+-------+-------------------------------------------------------+
+| F    | Type  | Description                                           |
+| ield |       |                                                       |
++======+=======+=======================================================+
+| cont | list  | controls_list can be appended through                 |
+| rols | /enum | WalkerControls.WControl                               |
++------+-------+-------------------------------------------------------+
+| s    | int32 | Target scene ID                                       |
+| cene |       |                                                       |
++------+-------+-------------------------------------------------------+
+
+**Usage:**
+
+::
+
+   controls.append(GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose))
+   GrabSim_pb2.WalkerControls(controls=controls, scene=0)
+
+WalkerControls.WControl
+~~~~~~~~~~~~~~~~~~~~~~~
+
+======== ================ ==================================
+Field    Type             Description
+======== ================ ==================================
+id       int32            The joined walker’s serial number.
+autowalk str              Usually set to is_autowalk.
+speed    int32            The speed to move. (cm/s)
+pose     GrabSim_pb2.Pose X, Y, Yaw
+======== ================ ==================================
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose)
+
+RemoveList
+~~~~~~~~~~
+
+===== ========= ==================================
+Field Type      Description
+===== ========= ==================================
+IDs   list/enum The joined walker’s serial number.
+scene int32     Target scene ID
+===== ========= ==================================
+
+**Usage:**
+
+::
+
+   GrabSim_pb2.RemoveList(IDs=[1, 3], scene=scene_id)
+
+Inference Methods for Walkers
+-----------------------------
+
+AcquireWalkers
+~~~~~~~~~~~~~~
+
+Query the model category of all walkers.
+
+**Request**: Nothing
+
+**Response**: model category of all walkers.
+
+**Usage:**
+
+::
+
+   print(stub.AcquireWalkers(GrabSim_pb2.NUL()))
+
+All walker model categories to the appendix for details. We provide 52
+categories of walker models with different appearances.
+
+AddWalker
+~~~~~~~~~
+
+Add walkers to the scene.
+
+**Request**: WalkerList - list of walkers to add
+
+**Response**: Scene - updated scene with walkers
+
+**Usage:**
+
+.. code:: python
+
+   updated_scene = stub.AddWalker(GrabSim_pb2.WalkerList(walkers=[walker1, walker2]))
+
+Add 4 walkers at specified positions to the scene and update the scene:
+
+.. code:: python
+
+   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
+
+   walker_loc = [[120, -500], [-35, -385], [115, -360], [50,-392]]
+   walker_list = []
+   for i in range(len(walker_loc)):
+       loc = walker_loc[i]
+       action = GrabSim_pb2.Action(scene=0, action=GrabSim_pb2.Action.ActionType.WalkTo, 
+                                   values=[loc[0], loc[1], 0, 0, 0])
+       scene = sim_client.Do(action)
+       print(scene.info)
+       walker_list.append(GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90)))
+   scene = stub.AddWalker(GrabSim_pb2.WalkerList(walkers=walker_list, scene=0))
+
+ControlWalkers
+~~~~~~~~~~~~~~
+
+Control walker movements.
+
+**Request**: WalkerControls - controls for each walker
+
+**Response**: Scene - updated scene with walker positions
+
+**Usage:**
+
+.. code:: python
+
+   updated_scene = stub.ControlWalkers(GrabSim_pb2.WalkerControls(controls=[control1, control2]))
+
+Designate 4 walkers to go to the designated location respectively, using
+ControlWalkers will formulate the route and move according to the
+designated pose and speed.
+
+.. code:: python
+
+   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
+
+   walker_loc = [[95, 140], [93, -356], [123, 400], [97,-381]]
+   controls = []
+   for i in range(len(scene.walkers)):
+       loc = walker_loc[i]
+       is_autowalk = True
+       pose = GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=180)
+       controls.append(GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose))
+   scene = stub.ControlWalkers(GrabSim_pb2.WalkerControls(controls=controls, scene=0))
+
+RemoveWalkers
+~~~~~~~~~~~~~
+
+Remove walkers from the scene.
+
+**Request**: RemoveList - IDs of walkers to remove
+
+**Response**: Scene - updated scene without removed walkers / delete
+specific walkers.
+
+**Usage:**
+
+.. code:: python
+
+   updated_scene = stub.RemoveWalkers(GrabSim_pb2.RemoveList(walker_ids=[1, 2]))
+
+Remove the walker and update the scene:
+
+::
+
+   scene = stub.Observe(GrabSim_pb2.SceneID(value=scene_id))
+   # print(scene.walkers)
+   scene = stub.RemoveWalkers(GrabSim_pb2.RemoveList(IDs=[1, 3], scene=scene_id))
+
+CleanWalkers
+~~~~~~~~~~~~
+
+Remove all walkers from the scene.
+
+**Request**: SceneID
+
+**Response**: Scene - updated scene without walkers / delete all
+walkers.
+
+**Usage:**
+
+.. code:: python
+
+   update_scene = stub.CleanWalkers(GrabSim_pb2.SceneID(value=0)) 
+
+BindCommand
+~~~~~~~~~~~
+
+Receive commands from the grpc server through BindCommand binding, such
+as clicking the record button in the VR scene, you will receive the
+“record” command
+
+**Request**: SceneID
+
+**Response**: Nothing
+
+**Usage:**
+
+.. code:: python
+
+   for cmd in stub.BindCommand(GrabSim_pb2.SceneID(value=0)):
+   	print(cmd)
+
+Easy begining
+=============
+
+Vision and Language navigation
+------------------------------
+
+.. code:: python
+
+   from google.protobuf import message
+   import grpc
+   import numpy as np
+   import cv2
+   import matplotlib.pyplot as plt
+
+   import GrabSim_pb2_grpc
+   import GrabSim_pb2
+
+   channel = grpc.insecure_channel('localhost:30001',options=[
+               ('grpc.max_send_message_length', 1024*1024*1024),
+               ('grpc.max_receive_message_length', 1024*1024*1024)
+           ])  # define the channel
+
+   stub = GrabSim_pb2_grpc.GrabSimStub(channel) # create a client
+   initworld = stub.SetWorld(GrabSim_pb2.BatchMap(count=4, mapID=3)) # init the world and creat 4 scenes(Caffe)
+
+   for i in range(len(initworld.scenes)):
+       scene=initworld.scenes[i] # choose the world's scenes[i] and print agent's location in the scene
+       print("scene %d, ginger location (%d,%d) direction %d"%(i,scene.location.X,scene.location.Y,scene.rotation.Yaw))
+       for j in range(len(initworld.scenes[i].objects)): # get the object and location in the scene
+           object = scene.objects[j]
+           print("scene %d, object %d: name %s, location (%d,%d,%d)"%(i,j,object.name,object.location.X,object.location.Y,object.location.Z))
+           
+       scene = stub.Do(GrabSim_pb2.Action(scene=i, action=GrabSim_pb2.Action.WalkTo, values=[-500, 100, 90, -1, 10])) 
+       # the agent naviagtion to (-500, 100, 90) and update scene.
+       print("scene %d, ginger moved to location %d,%d direction %d"%(i,scene.location.X,scene.location.Y,scene.rotation.Yaw))
+       
+   message = stub.Capture(GrabSim_pb2.CameraList(scene=0, cameras=[GrabSim_pb2.CameraName.Head_Depth, GrabSim_pb2.CameraName.Head_Color])) # use the carmer in agent's head to get observation(depth, RGB, segmentation)
+   images = message.images
+
+   depth = np.frombuffer(images[0].data, dtype=images[0].dtype).reshape(
+       (images[0].height, images[0].width, images[0].channels))
+   rgb = np.frombuffer(images[1].data, dtype=images[1].dtype).reshape(
+       (images[1].height, images[1].width, images[1].channels))
+   seg = np.frombuffer(images[0].data, dtype=images[0].dtype).reshape(
+       (images[0].height, images[0].width, images[0].channels))
+   items = message.info.split(';')
+   seg_object_names = {}
+   	for item in items:
+           key, value = item.split(':')
+           seg_object_names[int(key)] = value
+   # convert to BGR format
+   rgb = rgb[:, :, [2, 1, 0]]
+     
+   scene = stub.Reset(GrabSim_pb2.ResetParams(scene=0)) # reset scene[0] in the world
+
+Add objects in simulator
+------------------------
+
+.. code:: python
+
+   import grpc
+   import GrabSim_pb2_grpc
+   import GrabSim_pb2
+
+   channel = grpc.insecure_channel('localhost:30001',options=[
+               ('grpc.max_send_message_length', 1024*1024*1024),
+               ('grpc.max_receive_message_length', 1024*1024*1024)
+           ])  # define the channel
+
+   stub = GrabSim_pb2_grpc.GrabSimStub(channel) # create a client
+   initworld = stub.SetWorld(GrabSim_pb2.BatchMap(count=1, mapID=3)) # set world
+   scene = initworld.scenes[0] # choose scene
+
+   obj_list = [GrabSim_pb2.ObjectList.Object(X=25, Y=2, Yaw=15, Z=100, type="Mug")]
+   scene = stub.MakeObjects(GrabSim_pb2.ObjectList(objects=obj_list, scene=0))
+   objects = scene.objects
+
+Add walkers in simulator
+------------------------
+
+.. code:: python
+
+   import grpc
+   import GrabSim_pb2_grpc
+   import GrabSim_pb2
+
+   channel = grpc.insecure_channel('localhost:30001',options=[
+               ('grpc.max_send_message_length', 1024*1024*1024),
+               ('grpc.max_receive_message_length', 1024*1024*1024)
+           ])  # define the channel
+
+   stub = GrabSim_pb2_grpc.GrabSimStub(channel) # create a client
+   initworld = stub.SetWorld(GrabSim_pb2.BatchMap(count=1, mapID=3)) # set world
+   scene = stub.Observe(GrabSim_pb2.SceneID(value=0))
+
+   # acquire walkers
+   print(stub.AcquireWalkers(GrabSim_pb2.NUL()))
+
+   # add walkers
+   walker_loc = [[120, -500], [-35, -385], [115, -360], [50,-392]]
+   walker_list = []
+   for i in range(len(walker_loc)):
+       loc = walker_loc[i]
+       action = GrabSim_pb2.Action(scene=0, action=GrabSim_pb2.Action.ActionType.WalkTo, 
+                                   values=[loc[0], loc[1], 0, 0, 0])
+       scene = sim_client.Do(action)
+       print(scene.info)
+       walker_list.append(GrabSim_pb2.WalkerList.Walker(id=i, pose=GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=90)))
+   scene = stub.AddWalker(GrabSim_pb2.WalkerList(walkers=walker_list, scene=0))
+
+   # control walkers
+   walker_loc = [[95, 140], [93, -356], [123, 400], [97,-381]]
+   controls = []
+   for i in range(len(scene.walkers)):
+       loc = walker_loc[i]
+       is_autowalk = True
+       pose = GrabSim_pb2.Pose(X=loc[0], Y=loc[1], Yaw=180)
+       controls.append(GrabSim_pb2.WalkerControls.WControl(id=i, autowalk=is_autowalk, speed=200, pose=pose))
+   scene = stub.ControlWalkers(GrabSim_pb2.WalkerControls(controls=controls, scene=0))
+
+   # remove walkers
+   print(scene.walkers)
+   scene = stub.RemoveWalkers(GrabSim_pb2.RemoveList(IDs=[1, 3], scene=0))
+   print(scene.walkers)
+
+   # clean walkers
+   scene = stub.CleanWalkers(GrabSim_pb2.SceneID(value=0)) 
+
+The walker’s start location and target location must be reachable.
+Otherwise the the scene.info will be unreachable. You can test whether
+the target location is reachable by the following method:
+
+::
+
+   msg = stub.Do(GrabSim_pb2.Action(
+       action = GrabSim_pb2.Action.WalkTo,
+       values = [-2150,-1350,-100, 0, 10] 
+       # 0: Query only, not move
+       # -1: Teleport to target position
+       # 1: Navigation to target position
+   ))
+   print(msg.info)
 
 .. [1]
    https://docs.unrealengine.com/5.0/en-US/quick-start-guide-for-using-container-images-in-unreal-engine/
