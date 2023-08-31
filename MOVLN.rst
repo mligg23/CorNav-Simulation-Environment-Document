@@ -1,8 +1,6 @@
 Simulation Environment Document
 ===============================
 
-[TOC]
-
 Download Simulator
 ------------------
 
