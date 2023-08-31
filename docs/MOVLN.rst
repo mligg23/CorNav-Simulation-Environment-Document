@@ -145,7 +145,11 @@ Scene
 
 Our simulator provides 5 scenes, i.e.,separate tables, indoor scene,
 cafe, restaurant, and nursing house, which have a relatively large
-demand for robots. These scenes are rendered based on real-world
+demand for robots. From the perspective of room division, the restaurant
+consists of six rooms, namely the elevator, dining room, bar, beverage
+room, corridor, and lobby. The nursing home consists of four areas,
+i.e., bedroom, lobby, living room, and corridor. The cafe includes a bar
+and a dining area. These scenes are rendered based on real-world
 scenarios and contain more realistic details. The simulator is flexible
 and users can change the lighting and place more additional objects in
 the scene. Our simulator also supports walking pedestrians in the scene.
