@@ -1289,7 +1289,7 @@ List of scenes
 map id : 1 – Separate Tables
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure:: https://mligg23.github.io/MO-VLN-Site/images/banner5.png
+.. figure:: https://mligg23.github.io/CorNav-Site/images/banner5.png
    :alt: img
 
    img
@@ -1297,7 +1297,7 @@ map id : 1 – Separate Tables
 map id : 2 – Indoor Scene
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure:: https://mligg23.github.io/MO-VLN-Site/images/banner6.png
+.. figure:: https://mligg23.github.io/CorNav-Site/images/banner6.png
    :alt: img
 
    img
@@ -1305,7 +1305,7 @@ map id : 2 – Indoor Scene
 map id : 3 – Coffee
 ^^^^^^^^^^^^^^^^^^^
 
-.. figure:: https://mligg23.github.io/MO-VLN-Site/images/banner4.png
+.. figure:: https://mligg23.github.io/CorNav-Site/images/banner4.png
    :alt: img
 
    img
@@ -1313,7 +1313,7 @@ map id : 3 – Coffee
 map id : 4 – Restaurant
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure:: https://mligg23.github.io/MO-VLN-Site/images/banner2.png
+.. figure:: https://mligg23.github.io/CorNav-Site/images/banner2.png
    :alt: img
 
    img
@@ -1321,7 +1321,7 @@ map id : 4 – Restaurant
 map id : 5 – Nursing Room
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. figure:: https://mligg23.github.io/MO-VLN-Site/images/banner3.png
+.. figure:: https://mligg23.github.io/CorNav-Site/images/banner3.png
    :alt: img
 
    img
@@ -1585,7 +1585,7 @@ Controllable list Walker’s model categories(total 50 categories of walkers)
 List of controllable generated objects
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. figure:: https://mligg23.github.io/MO-VLN-Site/images/banner7.png
+.. figure:: https://mligg23.github.io/CorNav-Site/images/banner7.png
    :alt: img
 
    img
