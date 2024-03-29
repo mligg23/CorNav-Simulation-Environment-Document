@@ -3,11 +3,11 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to MO-VLN's documentation!
+Welcome to CorNav's documentation!
 ================================================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   MOVLN
+   CorNav
